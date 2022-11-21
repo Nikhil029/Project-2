@@ -4,6 +4,8 @@ import { Home } from './Components/Home'
 import { Signup } from './Components/Signup'
 import { Login } from './Components/Login'
 import {NotFound} from './Components/NotFound'
+import { AddProducts } from './Components/AddProducts'
+
 export const App = () => {
   return (
     <BrowserRouter>
@@ -11,6 +13,7 @@ export const App = () => {
         <Route exact path='/' component = {Home}/>
         <Route path="/signup" component={Signup}/>
         <Route path="/login" component={Login}/>
+        <Route path="/add-products" component={AddProducts}/>       
         <Route component={NotFound}/>
       </Switch>
     </BrowserRouter>
