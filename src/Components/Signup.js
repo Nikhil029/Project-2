@@ -1,8 +1,11 @@
 import React, {useState} from 'react'
+import {auth,fs} from '../Config/Config'
 import {Link} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 export const Signup = () => {
 
+  const history = useHistory();
     
     const [fullName, setFullname]=useState('');
     const [email, setEmail]=useState('');
@@ -13,7 +16,27 @@ export const Signup = () => {
 
     const handleSignup=(e)=>{
         e.preventDefault();
-        console.log(fullName, email, password);
+        
+        auth.createUserWithEmailAndPassword(email,password).then((credential)=>{
+          console.log(credential);
+          fs.collection('users').doc(credential.user.uid).set({
+            FullName: fullName,
+            Email: email,
+            Password: password
+        }).then(()=>{
+            setSuccessMsg('Signup Successfull. You will now automatically get redirected to Login');
+            setFullname('');
+            setEmail('');
+            setPassword('');
+            setErrorMsg('');
+            setTimeout(()=>{
+                setSuccessMsg('');
+                history.push('/login');
+            },2000)
+        }).catch(error=>setErrorMsg(error.message));
+        }).catch((error) => {
+          setErrorMsg(error.message)
+        })
     }
 
   return (
@@ -22,6 +45,10 @@ export const Signup = () => {
         <br></br>
         <h1>Sign Up</h1>
         <hr></hr>
+        {successMsg&&<>
+                <div className='success-msg'>{successMsg}</div>
+                <br></br>
+            </>}
         <form className='form-group' autoComplete='off' onSubmit={handleSignup}>
         <label>Full Name</label>
         <input type="text" className='form-control' required
@@ -41,6 +68,10 @@ export const Signup = () => {
             <button type="submit" className='btn btn-success btn-md'>SIGN Up</button>
         </div>
         </form>
+        {errorMsg&&<>
+                <br></br>
+                <div className='error-msg'>{errorMsg}</div>                
+            </>}
      </div>
   )
 }
