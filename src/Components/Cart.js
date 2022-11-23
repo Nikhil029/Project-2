@@ -8,11 +8,22 @@ import {useHistory} from 'react-router-dom'
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Modal } from './Modal';
 
 toast.configure();
 
-export const Cart = () => {
+export const Cart = () => { 
+    
+    const [showModal, setShowModal]=useState(false);
 
+    const triggerModal=()=>{
+        setShowModal(true);
+    }
+
+    const hideModal=()=>{
+        setShowModal(false);
+    }
+         
     function GetCurrentUser(){
         const [user, setUser]=useState(null);
         useEffect(()=>{
@@ -54,7 +65,6 @@ export const Cart = () => {
     const qty = cartProducts.map(cartProduct=>{
         return cartProduct.qty;
     })
-
     const reducerOfQty = (accumulator, currentValue)=>accumulator+currentValue;
 
     const totalQty = qty.reduce(reducerOfQty,0);
@@ -68,6 +78,7 @@ export const Cart = () => {
     const totalPrice = price.reduce(reducerOfPrice,0);
 
     let Product;
+    
     const cartProductIncrease=(cartProduct)=>{
         Product=cartProduct;
         Product.qty=Product.qty+1;
@@ -83,6 +94,7 @@ export const Cart = () => {
             }
         })
     }
+
     const cartProductDecrease =(cartProduct)=>{
         Product=cartProduct;
         if(Product.qty > 1){
@@ -100,7 +112,8 @@ export const Cart = () => {
             })
         }
     }
-     const [totalProducts, setTotalProducts]=useState(0);  
+
+     const [totalProducts, setTotalProducts]=useState(0);
      useEffect(()=>{        
          auth.onAuthStateChanged(user=>{
              if(user){
@@ -111,7 +124,7 @@ export const Cart = () => {
              }
          })       
      },[])
-    
+     
      const history = useHistory();
      const handleToken = async(token)=>{
         const cart = {name: 'All Products', totalPrice}
@@ -175,13 +188,24 @@ export const Cart = () => {
                             shippingAddress
                             name='All Products'
                             amount={totalPrice * 100}
-                        ></StripeCheckout>
+                        ></StripeCheckout> 
+                         <h6 className='text-center'
+                        style={{marginTop: 7+'px'}}>OR</h6>
+                        <button className='btn btn-secondary btn-md' 
+                        onClick={()=>triggerModal()}>Cash on Delivery</button>                                                                                                                                             
                     </div>                                    
                 </div>
             )}
             {cartProducts.length < 1 && (
                 <div className='container-fluid'>No products to show</div>
-            ) }           
+            ) }
+
+            {showModal===true&&(
+                <Modal TotalPrice={totalPrice} totalQty={totalQty}
+                    hideModal={hideModal}
+                />
+            )}          
+                            
         </>
     )
 }

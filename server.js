@@ -13,7 +13,7 @@ app.get('/',(req,res)=>{
 })
 
 app.post('/checkout',async(req, res)=>{
-    let Error;
+    let error;
     let status;
     try{
         const {cart, token}=req.body;
@@ -41,8 +41,8 @@ app.post('/checkout',async(req, res)=>{
         },{idempotencyKey: key})
         status="success";
     }
-    catch(error){
-        console.log(Error);
+    catch(Error){
+        console.log(error);
         status="error"
     }
     res.json({status});
