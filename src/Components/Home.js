@@ -18,7 +18,6 @@ export const Home = (props) => {
     }
 
     const uid = GetUserUid();
-
     function GetCurrentUser(){
         const [user, setUser]=useState(null);
         useEffect(()=>{
@@ -37,10 +36,7 @@ export const Home = (props) => {
     }
 
     const user = GetCurrentUser();
-
     const [products, setProducts]=useState([]);
-
-
     const getProducts = async ()=>{
         const products = await fs.collection('Products').get();
         const productsArray = [];
@@ -59,8 +55,20 @@ export const Home = (props) => {
     useEffect(()=>{
         getProducts();
     },[])
-    
+    const [totalProducts, setTotalProducts]=useState(0);   
+    useEffect(()=>{        
+        auth.onAuthStateChanged(user=>{
+            if(user){
+                fs.collection('Cart ' + user.uid).onSnapshot(snapshot=>{
+                    const qty = snapshot.docs.length;
+                    setTotalProducts(qty);
+                })
+            }
+        })       
+    },[])  
+
     let Product;
+
     const addToCart = (product)=>{
         if(uid!==null){
             Product=product;
@@ -79,7 +87,7 @@ export const Home = (props) => {
     
     return (
         <>
-            <Navbar user={user}/>           
+            <Navbar user={user} totalProducts={totalProducts}/>           
             <br></br>
             {products.length > 0 && (
                 <div className='container-fluid'>

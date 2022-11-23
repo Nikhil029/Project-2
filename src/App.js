@@ -5,6 +5,7 @@ import { Signup } from './Components/Signup'
 import { Login } from './Components/Login'
 import {NotFound} from './Components/NotFound'
 import { AddProducts } from './Components/AddProducts'
+import {Cart} from './Components/Cart'
 
 export const App = () => {
   return (
@@ -13,7 +14,8 @@ export const App = () => {
         <Route exact path='/' component = {Home}/>
         <Route path="/signup" component={Signup}/>
         <Route path="/login" component={Login}/>
-        <Route path="/add-products" component={AddProducts}/>       
+        <Route path="/add-products" component={AddProducts}/>  
+        <Route path="/cart" component={Cart}/>     
         <Route component={NotFound}/>
       </Switch>
     </BrowserRouter>
