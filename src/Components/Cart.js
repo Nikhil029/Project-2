@@ -128,7 +128,7 @@ export const Cart = () => {
      const history = useHistory();
      const handleToken = async(token)=>{ 
         const cart = {name: 'All Products', totalPrice}
-        const response = await axios.post('http://localhost:8080/checkout',{
+        const response = await axios.post('https://ecommercial-app-project.herokuapp.com/checkout',{
             token,
             cart
         })
