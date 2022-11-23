@@ -126,7 +126,7 @@ export const Cart = () => {
      },[])
      
      const history = useHistory();
-     const handleToken = async(token)=>{
+     const handleToken = async(token)=>{ 
         const cart = {name: 'All Products', totalPrice}
         const response = await axios.post('http://localhost:8080/checkout',{
             token,
